@@ -9,22 +9,19 @@
 <h1>{{ conversation.title }}</h1>
 <ul>
     {% for message in conversation.message_set.all %}
-    <li>{{ message.text }}</li>
+    <li>{{ message.text }} - {{ message.datetime }}</li>
 
     <h2>Thoughts</h2>
     <ul>
         {% for thought in message.thought_set.all %}
-        <li>{{ thought.text }}</li>
+        <li>{{ thought.text }} - {{ thought.datetime }}</li>
         {% endfor %}
     </ul>
 
     <h3>Add Thought</h3>
     <form action="{% url 'addthought' conversation.id message.id %}" method="post">
         {% csrf_token %}
-        <fieldset>
-            Text: <input type="text" name="newthought{{message.id}}" id="newthought{{message.id}}" >
-            Date: <input type="datetime-local" name="thoughtdate{{message.id}}" id="thoughtdate{{message.id}}"/>
-        </fieldset>
+        {{ thoughtform }}
         <input type="submit" value="Submit Thought">
     </form>
     {% endfor %}
@@ -32,10 +29,7 @@
 <h3>Add Message</h3>
 <form action="{% url 'addmessage' conversation.id %}" method="post">
     {% csrf_token %}
-    <fieldset>
-        Text: <input type="text" name="newmessage" id="newmessage" >
-        Date: <input type="datetime-local" name="messagedate" id="messagedate"/>
-    </fieldset>
+    {{ messageform }}
     <input type="submit" value="Submit Message">
 </form>
 </body>
