@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Conversational</title>
+</head>
+<body>
+{% if  conversation_list %}
+<ul>
+    {% for conversation in conversation_list %}
+    <li><a href="{% url 'detail' conversation.id %}">{{ conversation.title }}</a> - <span>{{ conversation.datetime }}</span></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No conversations are available. Start one?</p>
+{% endif %}
+
+<h2>Start a Conversation</h2>
+    <form action="{% url 'addconversation' %}" method="post">
+        {% csrf_token %}
+        <fieldset>
+            Title: <input type="text" name="title" id="title" >
+            Date: <input type="datetime-local" name="date" id="date"/>
+        </fieldset>
+        <input type="submit" value="Start a Conversation">
+    </form>
+<br/>
+
+<form action="{% url 'searchconversationtitles' %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        Search Conversations by Title: <input type="text" name="searchterm" id="searchterm" >
+    </fieldset>
+    <input type="submit" value="Find a Conversation">
+</form>
+
+<form action="{% url 'searchmessagetext' %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        Search Messages by Text Content: <input type="text" name="messagesearchterm" id="messagesearchterm" >
+    </fieldset>
+    <input type="submit" value="Find a Message">
+</form>
+
+</body>
+</html>

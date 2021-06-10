@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Conversational</title>
+</head>
+<body>
+<h1>{{ conversation.title }}</h1>
+<ul>
+    {% for message in queryset %}
+    <li>{{ message.text }}</li>
+
+    <h2>Thoughts</h2>
+    <ul>
+        {% for thought in message.thought_set.all %}
+        <li>{{ thought.text }}</li>
+        {% endfor %}
+    </ul>
+
+    {% endfor %}
+</ul>
+
+</body>
+</html>
