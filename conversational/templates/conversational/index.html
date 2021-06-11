@@ -1,44 +1,51 @@
-
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
     <meta charset="utf-8">
     <title>Conversational</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css"
+          integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'conversational/style.css' %}">
 </head>
 <body>
-{% if  conversation_list %}
-<ul>
-    {% for conversation in conversation_list %}
-    <li><a href="{% url 'detail' conversation.id %}">{{ conversation.title }}</a> - <span>{{ conversation.datetime }}</span></li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>No conversations are available. Start one?</p>
-{% endif %}
+<div class="main">
 
-<h2>Start a Conversation</h2>
-    <form action="{% url 'addconversation' %}" method="post">
+    {% if conversation_list %}
+    <div pure-g>
+        {% for conversation in conversation_list %}
+        <div class="pure-u-1-3"><a href="{% url 'detail' conversation.id %}">{{ conversation.title }}</a> -
+            <span>{{ conversation.date }}</span></div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No conversations are available. Start one?</p>
+    {% endif %}
+
+    <h2>Start a Conversation</h2>
+    <form action="{% url 'addconversation' %}" method="post" class="pure-form">
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Start a Conversation">
     </form>
-<br/>
+    <br/>
 
-<form action="{% url 'searchconversationtitles' %}" method="post">
-    {% csrf_token %}
-    <fieldset>
-        {{ searchconversationform }}
-    </fieldset>
-    <input type="submit" value="Find a Conversation">
-</form>
+    <h2>Search</h2>
+    <form action="{% url 'searchconversationtitles' %}" method="post" class="pure-form">
+        {% csrf_token %}
+        <fieldset>
+            {{ searchconversationform }}
+        </fieldset>
+        <input type="submit" value="Find a Conversation">
+    </form>
 
-<form action="{% url 'searchmessagetext' %}" method="post">
-    {% csrf_token %}
-    <fieldset>
-        {{ searchmessageform }}
-    </fieldset>
-    <input type="submit" value="Find a Message">
-</form>
-
+    <form action="{% url 'searchmessagetext' %}" method="post" class="pure-form">
+        {% csrf_token %}
+        <fieldset>
+            {{ searchmessageform }}
+        </fieldset>
+        <input type="submit" value="Find a Message">
+    </form>
+</div>
 </body>
 </html>

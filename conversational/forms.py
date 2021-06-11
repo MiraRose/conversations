@@ -7,7 +7,7 @@ class DateInput(forms.DateTimeInput):
 
 class ConversationForm(forms.Form):
     title = forms.CharField(label='Title', max_length=150)
-    date = forms.DateTimeField(label='Date/Time', widget=DateInput(), input_formats='')
+    date = forms.DateField(label='Start Date', widget=forms.SelectDateWidget)
 
 
 class MessageForm(forms.Form):
@@ -22,6 +22,7 @@ class ThoughtForm(forms.Form):
 
 class SearchConversationForm(forms.Form):
     searchterm = forms.CharField(label='Search Conversations by Title', max_length=150)
+
 
 class SearchMessageForm(forms.Form):
     searchterm = forms.CharField(label='Search Messages by Content', max_length=150)

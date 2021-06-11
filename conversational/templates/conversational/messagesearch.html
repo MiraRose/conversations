@@ -5,6 +5,7 @@
     <title>Conversational</title>
 </head>
 <body>
+<a href="{% url 'index' %}">Home</a>
 <h1>{{ conversation.title }}</h1>
 <ul>
     {% for message in queryset %}
