@@ -18,7 +18,7 @@
 <div>
     <h3>Messages</h3>
     {% for message in conversation.message_set.all %}
-    <div>{{ message.text }} - {{ message.datetime }}</div>
+    <div><p>{{ message.text }} - {{ message.datetime }}</p></div>
 
     <h4>Thoughts</h4>
     <ul>

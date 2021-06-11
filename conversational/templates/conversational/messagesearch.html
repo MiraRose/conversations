@@ -7,6 +7,7 @@
 <body>
 <a href="{% url 'index' %}">Home</a>
 <h1>{{ conversation.title }}</h1>
+{% if queryset %}
 <ul>
     {% for message in queryset %}
     <li>{{ message.text }}</li>
@@ -20,6 +21,17 @@
 
     {% endfor %}
 </ul>
+{% else %}
+<p>No messages found. Try again?</p>
+
+<form action="{% url 'searchmessagetext' %}" method="post" class="pure-form">
+    {% csrf_token %}
+    <fieldset>
+        {{ searchmessageform }}
+    </fieldset>
+    <input type="submit" value="Find a Message">
+</form>
+{% endif %}
 
 </body>
 </html>

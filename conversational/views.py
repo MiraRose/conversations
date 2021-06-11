@@ -37,7 +37,6 @@ def detail(request, conversation_id):
                    })
 
 
-
 def addmessage(request, conversation_id):
     conversation = get_object_or_404(Conversation, pk=conversation_id)
     form = MessageForm(request.POST)
@@ -48,9 +47,9 @@ def addmessage(request, conversation_id):
         messageform = MessageForm()
         thoughtform = ThoughtForm()
 
-        return render(request, 'conversational/detail.html', {'conversation': conversation,
-                                                              'messageform': messageform,
-                                                              'thoughtform': thoughtform})
+        return HttpResponseRedirect(reverse('detail', args=(conversation_id,)), {'conversation': conversation,
+                                                                                 'messageform': messageform,
+                                                                                 'thoughtform': thoughtform})
 
 
 def addthought(request, conversation_id, message_id):
@@ -66,9 +65,9 @@ def addthought(request, conversation_id, message_id):
         messageform = MessageForm()
         thoughtform = ThoughtForm()
 
-        return render(request, 'conversational/detail.html', {'conversation': conversation,
-                                                              'messageform': messageform,
-                                                              'thoughtform': thoughtform})
+        return HttpResponseRedirect(reverse('detail', args=(conversation_id,)), {'conversation': conversation,
+                                                                                 'messageform': messageform,
+                                                                                 'thoughtform': thoughtform})
 
 
 def addconversation(request):
@@ -84,11 +83,12 @@ def searchconversationtitles(request):
     searchconversation = SearchConversationForm(request.POST)
     addform = ConversationForm(request.POST)
     if searchconversation.is_valid():
+
         searchterm = searchconversation.cleaned_data['searchterm']
         queryset = Conversation.objects.filter(title__icontains=searchterm)
         context = {
             'queryset': queryset,
-            'form': addform
+            'form': addform,
         }
         template = loader.get_template('conversational/conversationsearch.html')
         return HttpResponse(template.render(context, request))
@@ -97,10 +97,12 @@ def searchconversationtitles(request):
 def searchmessagetext(request):
     searchmessage = SearchMessageForm(request.POST)
     if searchmessage.is_valid():
+        searchmessageform = SearchMessageForm()
         searchterm = searchmessage.cleaned_data['searchterm']
         queryset = Message.objects.filter(text__icontains=searchterm)
         context = {
             'queryset': queryset,
+            'searchmessageform': searchmessageform
         }
         template = loader.get_template('conversational/messagesearch.html')
         return HttpResponse(template.render(context, request))
@@ -114,12 +116,12 @@ def create_conversation(form):
 
 
 def create_thought(form, message):
-
     newthought = Thought()
     newthought.text = form.cleaned_data['text']
     newthought.datetime = form.cleaned_data['date']
     newthought.message = message
     return newthought
+
 
 def create_message(form, conversation):
     newmessage = Message()

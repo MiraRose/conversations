@@ -114,7 +114,7 @@ class ConversationalTests(TestCase):
     def test_post_message_show_message_after_posting(self):
         conversation = create_test_conversation("this is a conversation")
         url = reverse('addmessage', args=(conversation.id,))
-        response = self.client.post(url, {'text': 'this is a message', 'date': mydatetime})
+        response = self.client.post(url, {'text': 'this is a message', 'date': mydatetime}, follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "this is a message")
@@ -123,7 +123,7 @@ class ConversationalTests(TestCase):
         conversation = create_test_conversation("this is a conversation")
         message = create_test_message("this is a message", conversation)
         url = reverse('addthought', args=(conversation.id, message.id))
-        response = self.client.post(url, {'text': 'this is a thought', 'date': mydatetime})
+        response = self.client.post(url, {'text': 'this is a thought', 'date': mydatetime}, follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "this is a thought")
