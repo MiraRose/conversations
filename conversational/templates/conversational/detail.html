@@ -13,21 +13,26 @@
 {{ error_message }}
 <div class="main">
 <a href="{% url 'index' %}">Home</a>
-<h1>Conversations</h1>
+<h1>Conversation</h1>
 <h2>{{ conversation.title }}</h2>
 <div>
     <h3>Messages</h3>
-    {% for message in conversation.message_set.all %}
-    <div><p>{{ message.text }} - {{ message.datetime }}</p></div>
 
-    <h4>Thoughts</h4>
+    {% for message in conversation.message_set.all %}
+
+    <div>
+        <h4>Message</h4>
+        <p>{{ message.text }} - {{ message.datetime }}</p>
+    </div>
+
+    <h5>Thoughts About the Message</h5>
     <ul>
         {% for thought in message.thought_set.all %}
         <li>{{ thought.text }} - {{ thought.datetime }}</li>
         {% endfor %}
     </ul>
 
-    <h3>Add Thought</h3>
+    <h3>Add Thought to Above Message</h3>
     <form action="{% url 'addthought' conversation.id message.id %}" method="post" class="pure-form">
         {% csrf_token %}
         {{ thoughtform }}
