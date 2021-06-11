@@ -56,7 +56,7 @@ class ConversationalTests(TestCase):
 
     def test_message_shows_on_details_page_with_associated_conversation(self):
         conversation = create_test_conversation("this is a conversation")
-        message = create_test_message("this is a message", conversation)
+        create_test_message("this is a message", conversation)
         url = reverse('detail', args=(conversation.id,))
 
         response = self.client.get(url)
@@ -68,7 +68,7 @@ class ConversationalTests(TestCase):
     def test_thought_shows_on_details_page_with_associated_conversation_and_message(self):
         conversation = create_test_conversation("this is a conversation")
         message = create_test_message("this is a message", conversation)
-        thought = create_test_thought("this is a thought", message)
+        create_test_thought("this is a thought", message)
         url = reverse('detail', args=(conversation.id,))
 
         response = self.client.get(url)
@@ -79,8 +79,8 @@ class ConversationalTests(TestCase):
         self.assertContains(response, "this is a thought")
 
     def test_search_conversation_by_title_shows_expected_conversation(self):
-        conversation = create_test_conversation("this is a conversation")
-        conversation2 = create_test_conversation("redherring")
+        create_test_conversation("this is a conversation")
+        create_test_conversation("redherring")
         url = reverse('searchconversationtitles')
 
         response = self.client.post(url, {'searchterm': 'this'})
@@ -92,8 +92,8 @@ class ConversationalTests(TestCase):
     def test_search_message_by_text_shows_expected_message_thought(self):
         conversation = create_test_conversation("this is a conversation")
         message = create_test_message("this is a message", conversation)
-        message2 = create_test_message("redherring", conversation)
-        thought = create_test_thought("this is a thought", message)
+        create_test_message("redherring", conversation)
+        create_test_thought("this is a thought", message)
         url = reverse('searchmessagetext')
 
         response = self.client.post(url, {'searchterm': 'message'})
@@ -119,7 +119,7 @@ class ConversationalTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "this is a message")
 
-    def test_post_message_show_message_after_posting(self):
+    def test_post_thought_show_thought_after_posting(self):
         conversation = create_test_conversation("this is a conversation")
         message = create_test_message("this is a message", conversation)
         url = reverse('addthought', args=(conversation.id, message.id))
@@ -133,6 +133,7 @@ class ConversationalTests(TestCase):
         form.is_valid()
         conversation = create_test_conversation("This is a conversation")
         message = create_test_message("This is a message", conversation)
+
         result_thought = create_thought(form, message)
 
         self.assertEqual(result_thought.text, "This is a thought")
