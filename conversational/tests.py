@@ -89,6 +89,14 @@ class ConversationalTests(TestCase):
         self.assertContains(response, "this is a conversation")
         self.assertNotContains(response, "redherring")
 
+    def test_if_no_conversaton_for_term_shows_proper_message(self):
+        url = reverse('searchconversationtitles')
+
+        response = self.client.post(url, {'searchterm': 'this'})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No conversations found with your search term.")
+
     def test_search_message_by_text_shows_expected_message_thought(self):
         conversation = create_test_conversation("this is a conversation")
         message = create_test_message("this is a message", conversation)
@@ -102,6 +110,16 @@ class ConversationalTests(TestCase):
         self.assertContains(response, "this is a message")
         self.assertContains(response, "this is a thought")
         self.assertNotContains(response, "redherring")
+
+    def test_if_no_message_for_term_shows_proper_message(self):
+        create_test_conversation("this is a conversation")
+
+        url = reverse('searchmessagetext')
+
+        response = self.client.post(url, {'searchterm': 'message'})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No messages found")
 
     def test_post_conversation_show_conversation_on_index_after_posting(self):
         url = reverse('addconversation')
@@ -128,7 +146,7 @@ class ConversationalTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "this is a thought")
 
-    def test_create_thought_has_text_date(self):
+    def test_create_thought_from_form_has_text_date(self):
         form = ThoughtForm(data={"text": "This is a thought", "date": mydatetime})
         form.is_valid()
         conversation = create_test_conversation("This is a conversation")
@@ -139,7 +157,7 @@ class ConversationalTests(TestCase):
         self.assertEqual(result_thought.text, "This is a thought")
         self.assertEqual(result_thought.datetime, mydatetime)
 
-    def test_create_conversation_has_title_date(self):
+    def test_create_conversation_from_form_has_title_date(self):
         form = ConversationForm(data={"title": "This is a conversation", "date": date})
         form.is_valid()
 
@@ -148,7 +166,7 @@ class ConversationalTests(TestCase):
         self.assertEqual(result_conversation.title, "This is a conversation")
         self.assertEqual(result_conversation.date, date)
 
-    def test_create_message_has_text_date(self):
+    def test_create_message_from_form_has_text_date(self):
         form = MessageForm(data={"text": "This is a message", "date": mydatetime})
         form.is_valid()
         conversation = create_test_conversation("This is a conversation")
